@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>圣家堂参观讲解指南 · Sagrada Família</title>
+<style>
+  :root{
+    --sand:#e9dcc3; --stone:#c8b48c; --deep:#3a2c1a; --ink:#2b2015;
+    --accent:#c25e1c; --accent2:#7d9b76; --sky:#a9c7e0; --paper:#fbf7ee;
+    --shadow:0 10px 30px rgba(58,44,26,.15);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    color:var(--ink); background:var(--paper); line-height:1.75; -webkit-font-smoothing:antialiased;
+  }
+  /* ---------- Hero ---------- */
+  header.hero{
+    position:relative; min-height:78vh; display:flex; flex-direction:column;
+    justify-content:center; align-items:center; text-align:center; padding:4rem 1.2rem;
+    color:#fff; overflow:hidden;
+    background:
+      radial-gradient(120% 90% at 50% 0%, rgba(255,220,160,.35), transparent 60%),
+      linear-gradient(160deg,#5b7fa6 0%, #8a6f4a 45%, #c25e1c 100%);
+  }
+  header.hero::after{
+    content:""; position:absolute; inset:0;
+    background:
+      repeating-linear-gradient(85deg, rgba(255,255,255,.05) 0 3px, transparent 3px 26px),
+      radial-gradient(60% 70% at 50% 120%, rgba(0,0,0,.4), transparent);
+    pointer-events:none;
+  }
+  .spires{position:absolute; bottom:0; left:0; right:0; height:42%; z-index:1; opacity:.9}
+  .hero-inner{position:relative; z-index:2; max-width:820px}
+  .hero .kicker{letter-spacing:.4em; font-size:.8rem; text-transform:uppercase; opacity:.9}
+  .hero h1{font-size:clamp(2.2rem,6vw,4rem); margin:.4rem 0 .2rem; text-shadow:0 4px 18px rgba(0,0,0,.35); font-weight:800}
+  .hero .sub{font-size:clamp(1rem,2.4vw,1.35rem); opacity:.95}
+  .hero .meta{margin-top:1.4rem; font-size:.95rem; opacity:.9}
+  .scroll-hint{margin-top:2rem; font-size:.85rem; opacity:.8}
+  /* ---------- Layout ---------- */
+  main{max-width:900px; margin:0 auto; padding:0 1.2rem}
+  section{padding:3rem 0; border-bottom:1px dashed rgba(58,44,26,.18)}
+  section:last-child{border-bottom:none}
+  .tag{display:inline-block; background:var(--accent2); color:#fff; font-size:.72rem; letter-spacing:.15em;
+    padding:.25rem .7rem; border-radius:999px; text-transform:uppercase; margin-bottom:.7rem}
+  h2{font-size:clamp(1.5rem,3.6vw,2.1rem); line-height:1.3; margin-bottom:.3rem; color:var(--deep)}
+  h2 .es{display:block; font-size:.95rem; font-weight:500; color:var(--accent); letter-spacing:.05em; margin-top:.2rem}
+  .figure{
+    margin:1.3rem 0; border-radius:16px; overflow:hidden; box-shadow:var(--shadow); position:relative;
+    aspect-ratio:16/9; background:linear-gradient(135deg,var(--stone),var(--sand));
+  }
+  .figure img{width:100%; height:100%; object-fit:cover; display:block}
+  .figure .ph{
+    position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    color:var(--deep); text-align:center; padding:1rem; gap:.5rem;
+  }
+  .figure .ph .icon{font-size:2.6rem; opacity:.5}
+  .figure figcaption{
+    position:absolute; left:0; right:0; bottom:0; padding:.6rem 1rem; font-size:.82rem;
+    color:#fff; background:linear-gradient(transparent, rgba(0,0,0,.6)); z-index:2;
+  }
+  p{margin:.7rem 0}
+  .lead{font-size:1.08rem}
+  ul.facts{list-style:none; margin:1rem 0; display:grid; gap:.55rem}
+  ul.facts li{padding-left:1.6rem; position:relative}
+  ul.facts li::before{content:"›"; position:absolute; left:.3rem; color:var(--accent); font-weight:700}
+  .callout{background:#fff3e2; border-left:4px solid var(--accent); padding:.9rem 1.1rem; border-radius:0 10px 10px 0; margin:1.1rem 0; font-size:.96rem}
+  .callout b{color:var(--accent)}
+  /* ---------- Audio button ---------- */
+  .audio-btn{
+    display:inline-flex; align-items:center; gap:.6rem; cursor:pointer; border:none;
+    background:var(--deep); color:#fff; padding:.7rem 1.2rem; border-radius:999px;
+    font-size:.95rem; font-family:inherit; box-shadow:var(--shadow); transition:.2s; margin-top:.4rem;
+  }
+  .audio-btn:hover{background:var(--accent); transform:translateY(-1px)}
+  .audio-btn.playing{background:var(--accent)}
+  .audio-btn .dot{width:10px; height:10px; border-radius:50%; background:#8fdc8f}
+  .audio-btn.playing .dot{background:#fff; animation:pulse 1s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  /* ---------- Sticky mini player ---------- */
+  #player{
+    position:fixed; left:50%; transform:translateX(-50%) translateY(120%); bottom:1rem; z-index:50;
+    background:rgba(43,32,21,.96); color:#fff; padding:.7rem 1rem; border-radius:14px;
+    display:flex; align-items:center; gap:.9rem; box-shadow:0 12px 40px rgba(0,0,0,.35);
+    max-width:92vw; transition:transform .3s; backdrop-filter:blur(6px);
+  }
+  #player.show{transform:translateX(-50%) translateY(0)}
+  #player .now{font-size:.85rem; max-width:48vw; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  #player button{background:#fff2; border:none; color:#fff; width:34px; height:34px; border-radius:50%; cursor:pointer; font-size:1rem}
+  #player button:hover{background:#fff4}
+  #player .rate{font-size:.75rem; opacity:.8; cursor:pointer; user-select:none; padding:.2rem .4rem; border-radius:6px}
+  #player .rate:hover{background:#fff2}
+  /* ---------- TOC ---------- */
+  nav.toc{background:#fff; border-radius:14px; box-shadow:var(--shadow); padding:1.2rem 1.4rem; margin:2rem 0}
+  nav.toc h3{font-size:.9rem; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:.6rem}
+  nav.toc ol{list-style:none; counter-reset:t; display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:.3rem}
+  nav.toc a{counter-increment:t; text-decoration:none; color:var(--ink); display:block; padding:.35rem .2rem; border-radius:8px; font-size:.95rem}
+  nav.toc a::before{content:counter(t,decimal-leading-zero) "  "; color:var(--stone); font-variant-numeric:tabular-nums}
+  nav.toc a:hover{background:var(--sand)}
+  footer{text-align:center; padding:2.5rem 1rem 4rem; color:var(--deep); font-size:.85rem; opacity:.8}
+  .warn{background:#fff; border:1px dashed var(--accent); padding:.7rem 1rem; border-radius:10px; font-size:.85rem; margin:1rem 0; color:var(--deep)}
+  @media(max-width:600px){ #player .now{max-width:38vw} }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <svg class="spires" viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true">
+    <g fill="rgba(30,20,10,.35)">
+      <path d="M100 400 L120 120 Q130 90 140 120 L160 400Z"/>
+      <path d="M230 400 L250 60 Q262 20 274 60 L294 400Z"/>
+      <path d="M360 400 L380 150 Q390 120 400 150 L420 400Z"/>
+      <path d="M560 400 L590 30 Q605 -20 620 30 L650 400Z"/>
+      <path d="M720 400 L745 100 Q757 65 769 100 L794 400Z"/>
+      <path d="M880 400 L905 70 Q918 25 931 70 L956 400Z"/>
+      <path d="M1030 400 L1050 140 Q1060 110 1070 140 L1090 400Z"/>
+    </g>
+  </svg>
+  <div class="hero-inner">
+    <div class="kicker">Barcelona · 巴塞罗那</div>
+    <h1>圣家堂参观讲解指南</h1>
+    <div class="sub">Basílica de la Sagrada Família — 高迪未完成的石头森林</div>
+    <div class="meta">🎧 图 · 文 · 语音讲解　|　点击每段的「播放讲解」即可听导览</div>
+    <div class="scroll-hint">↓ 向下滚动开始 ↓</div>
+  </div>
+</header>
+
+<main>
+
+  <nav class="toc">
+    <h3>参观路线 · 目录</h3>
+    <ol>
+      <a href="#intro">走近圣家堂</a>
+      <a href="#plan">参观须知</a>
+      <a href="#nativity">诞生立面</a>
+      <a href="#passion">受难立面</a>
+      <a href="#glory">荣耀立面</a>
+      <a href="#nave">中殿石林</a>
+      <a href="#light">彩窗与光影</a>
+      <a href="#towers">登塔</a>
+      <a href="#museum">地下室与博物馆</a>
+      <a href="#route">动线与贴士</a>
+    </ol>
+  </nav>
+
+  <!-- ============ 1 ============ -->
+  <section id="intro">
+    <span class="tag">Introducción · 概览</span>
+    <h2>走近圣家堂<span class="es">Un templo que lleva 140 años construyéndose</span></h2>
+    <figure class="figure" data-img="Sagrada Familia nubes.jpg" data-icon="⛪">
+      <figcaption>圣家堂全景 · 十八座塔楼直指天空</figcaption>
+    </figure>
+    <p class="lead">圣家堂是建筑师安东尼·高迪（Antoni Gaudí）倾注四十余年心血的巨作，1882 年动工，至今仍在建造，被称为「永远盖不完的教堂」。它是世界上唯一一座在建筑师去世近百年后、仍按其构想持续施工的世界文化遗产。</p>
+    <ul class="facts">
+      <li>动工于 <b>1882 年</b>，高迪 1883 年接手，此后 43 年只专注于此，晚年更住在工地。</li>
+      <li>1926 年高迪被有轨电车撞倒去世，教堂当时仅完成约四分之一。</li>
+      <li>整体规划 <b>18 座塔楼</b>：12 座代表使徒，4 座代表福音书作者，1 座圣母塔，最高的 1 座耶稣基督塔建成后将达 <b>172.5 米</b>，成为世界最高的教堂。</li>
+      <li>预计在高迪逝世百年 —— <b>2026 年前后</b> 完成主体结构。</li>
+    </ul>
+    <div class="callout"><b>看点提示：</b>高迪从不用直线。他说「直线属于人类，曲线属于上帝」，整座教堂模仿森林、山峰、骨骼与花朵——把大自然的结构变成了石头。</div>
+    <button class="audio-btn" data-title="走近圣家堂">
+      <span class="dot"></span> 播放讲解
+    </button>
+  </section>
+
+  <!-- ============ 2 ============ -->
+  <section id="plan">
+    <span class="tag">Antes de entrar · 参观须知</span>
+    <h2>出发前，先做这几件事<span class="es">Consejos prácticos</span></h2>
+    <ul class="facts">
+      <li><b>务必提前网上订票</b>：官网 sagradafamilia.org 出售定时票，现场几乎买不到当天票，旺季常提前数天售罄。</li>
+      <li><b>选票类型</b>：基础票（仅教堂）／含语音导览／含登塔。<b>想登塔一定要在购票时单独选</b>，名额有限且需选具体时段。</li>
+      <li><b>着装</b>：这是活的宗教场所，避免露肩露膝的过于暴露的衣着。</li>
+      <li><b>最佳光线时间</b>：上午进东侧（诞生立面）彩窗透入暖金色光；下午西侧（受难立面）透入蓝紫冷光——想拍内部光影，建议 <b>上午 10 点前或下午 3 点后</b>。</li>
+      <li><b>如何到达</b>：地铁 L2/L5 线 <b>Sagrada Família</b> 站出站即到。</li>
+      <li>安检类似机场，大件行李无法寄存，尽量轻装。</li>
+    </ul>
+    <div class="warn">🎧 <b>关于本页语音：</b>本页用你浏览器自带的语音合成朗读，无需下载音频、离线可用。首次点击若无声音，多为浏览器静音或未加载中文语音包——见页脚说明。建议用电脑版 Chrome / Edge / Safari。</div>
+    <button class="audio-btn" data-title="参观须知">
+      <span class="dot"></span> 播放讲解
+    </button>
+  </section>
+
+  <!-- ============ 3 ============ -->
+  <section id="nativity">
+    <span class="tag">Fachada del Nacimiento · 东立面</span>
+    <h2>诞生立面<span class="es">La única fachada terminada en vida de Gaudí</span></h2>
+    <figure class="figure" data-img="Sagrada Familia Nativity façade.jpg" data-icon="🌿">
+      <figcaption>诞生立面 · 高迪生前唯一亲手完成的一面</figcaption>
+    </figure>
+    <p>这是高迪在世时唯一亲手督造完成的立面，朝东、迎向日出，象征基督的诞生与生命。它繁复得像被藤蔓和生灵覆盖——石头上爬满了花草、动物、天使与乐师。</p>
+    <ul class="facts">
+      <li>三道门分别献给 <b>信、望、爱</b>（希望、信仰、慈爱）三种美德。</li>
+      <li>正中是耶稣诞生的场景：马槽、圣母玛利亚、约瑟，上方是报喜的天使唱诗班。</li>
+      <li>找找细节：火鸡、变色龙、蜗牛、乌龟驮着立柱——<b>石龟象征永恒与稳定</b>。</li>
+      <li>顶部的绿色陶瓷「生命之树」上停满白鸽，是威尼斯玻璃马赛克镶嵌。</li>
+    </ul>
+    <div class="callout"><b>怎么看：</b>诞生立面细节太多，别急着走。退到马路对面的<b>高迪广场（Plaça de Gaudí）水池边</b>，能把整面连同倒影一起收入眼底，这是最经典的拍摄机位。</div>
+    <button class="audio-btn" data-title="诞生立面">
+      <span class="dot"></span> 播放讲解
+    </button>
+  </section>
+
+  <!-- ============ 4 ============ -->
+  <section id="passion">
+    <span class="tag">Fachada de la Pasión · 西立面</span>
+    <h2>受难立面<span class="es">Líneas duras, dolor y muerte</span></h2>
+    <figure class="figure" data-img="Passion façade Sagrada Familia Barcelona Spain.jpg" data-icon="✝️">
+      <figcaption>受难立面 · 硬朗棱角，讲述耶稣受难</figcaption>
+    </figure>
+    <p>与诞生立面的繁茂相反，朝西的受难立面刻意做得<b>冷峻、瘦削、棱角分明</b>。倾斜的立柱像被剥去皮肉的骨头，表现耶稣受难与死亡的痛苦。它由雕塑家 Josep Maria Subirachs 于 1980 年代起按高迪构想续建，风格更现代抽象。</p>
+    <ul class="facts">
+      <li>场景自下而上、呈 S 形排列，讲述从最后的晚餐到耶稣被钉十字架、下葬的过程。</li>
+      <li>找找那个 <b>数字魔方（幻方）</b>：16 格数字，无论横竖斜相加都等于 <b>33</b>——耶稣受难时的年龄。</li>
+      <li>门上刻着多种语言的经文，青铜大门本身就是一件文字雕塑。</li>
+    </ul>
+    <button class="audio-btn" data-title="受难立面">
+      <span class="dot"></span> 播放讲解
+    </button>
+  </section>
+
+  <!-- ============ 5 ============ -->
+  <section id="glory">
+    <span class="tag">Fachada de la Gloria · 南立面</span>
+    <h2>荣耀立面<span class="es">La fachada principal, aún en obras</span></h2>
+    <figure class="figure" data-img="Sagrada Familia 8-12-21 (1).jpg" data-icon="🏗️">
+      <figcaption>荣耀立面 · 未来的主入口，仍在建造</figcaption>
+    </figure>
+    <p>朝南的荣耀立面是<b>规划中的教堂正门</b>，规模最大、最宏伟，主题是「荣耀」——人通往上帝、通往天堂之路。它至今仍在建造，你参观时很可能看到脚手架与吊塔，这正是「活着的教堂」的一部分。</p>
+    <ul class="facts">
+      <li>建成后将由一段大台阶引入，气势远超现有两面。</li>
+      <li>正是这座立面上方，将矗立最高的 <b>耶稣基督塔（172.5 米）</b>，顶端有一支发光的十字架。</li>
+    </ul>
+    <button class="audio-btn" data-title="荣耀立面">
+      <span class="dot"></span> 播放讲解
+    </button>
+  </section>
+
+  <!-- ============ 6 ============ -->
+  <section id="nave">
+    <span class="tag">Interior · 中殿</span>
+    <h2>走进石头森林<span class="es">Un bosque de columnas</span></h2>
+    <figure class="figure" data-img="Sagrada Familia (interior).jpg" data-icon="🌳">
+      <figcaption>中殿 · 树状立柱撑起「石头森林」</figcaption>
+    </figure>
+    <p class="lead">走进去的一瞬间，大多数人会屏住呼吸。这是整趟参观的高潮——高迪把教堂内部设计成一片<b>森林</b>：立柱像树干般向上生长，在高处分出枝杈，撑起顶棚，顶棚的天窗如同透过树叶洒下的阳光。</p>
+    <ul class="facts">
+      <li>立柱采用高迪独创的<b>树状分叉结构</b>，能更均匀地承重，因此中殿不需要外部飞扶壁——他说这是「大自然早就解决了的问题」。</li>
+      <li>柱子会随高度改变截面形状（从多边形渐变到圆形），像被光打磨过。</li>
+      <li>抬头看顶棚：一朵朵向日葵般的采光孔，中央殿高达 <b>45 米</b>。</li>
+    </ul>
+    <div class="callout"><b>别忘了抬头：</b>很多人只顾看彩窗，却错过了顶棚。找一处中殿正中站定，抬头慢慢看那片「树冠」——这是全世界独一无二的天花板。</div>
+    <button class="audio-btn" data-title="中殿石林">
+      <span class="dot"></span> 播放讲解
+    </button>
+  </section>
+
+  <!-- ============ 7 ============ -->
+  <section id="light">
+    <span class="tag">Vidrieras · 光与色</span>
+    <h2>彩窗与光影<span class="es">La luz de Gaudí</span></h2>
+    <figure class="figure" data-img="Sagrada Familia (Barcelona) - stained glass.jpg" data-icon="🌈">
+      <figcaption>彩色玻璃窗 · 东暖西冷，随日光流转</figcaption>
+    </figure>
+    <p>高迪把光当成建筑材料来用。彩窗由玻璃艺术家 Joan Vila-Grau 设计，<b>东侧用暖色（金、橙、红），象征日出与诞生；西侧用冷色（蓝、绿、紫），象征日落与安息</b>。阳光穿过时，整个中殿像被点燃，色彩会随时间在石柱与地面上缓缓移动。</p>
+    <ul class="facts">
+      <li>上午的暖光、下午的冷光，是两种完全不同的体验，条件允许可分不同时段各来一次。</li>
+      <li>彩窗上多为抽象色块而非人物，为的是让「光」本身成为主角。</li>
+      <li>找一面白墙或浅色石柱，看色光如何投在上面——这是最好的「取景框」。</li>
+    </ul>
+    <button class="audio-btn" data-title="彩窗与光影">
+      <span class="dot"></span> 播放讲解
+    </button>
+  </section>
+
+  <!-- ============ 8 ============ -->
+  <section id="towers">
+    <span class="tag">Torres · 登塔</span>
+    <h2>登上塔楼<span class="es">Vistas y escaleras de caracol</span></h2>
+    <figure class="figure" data-img="Sagrada Familia spiral staircase.jpg" data-icon="🌀">
+      <figcaption>塔内螺旋楼梯 · 像贝壳，也像蜗牛</figcaption>
+    </figure>
+    <p>若购票时加选了登塔，你可乘电梯上到塔楼高处，近距离看塔尖的马赛克装饰，并俯瞰巴塞罗那城市与地中海方向的风景。<b>诞生立面塔</b>与<b>受难立面塔</b>视野各异，购票时可选。</p>
+    <ul class="facts">
+      <li><b>上塔坐电梯，下塔走楼梯</b>：那段螺旋石梯像巨大的贝壳/蜗牛壳，是名场面，但台阶窄、无扶手中心是镂空的。</li>
+      <li>有<b>恐高、幽闭恐惧或行动不便者慎选</b>；通常有年龄/身高限制，儿童需留意。</li>
+      <li>塔票按时段限流，务必按票面时间到指定入口集合，迟到不候。</li>
+    </ul>
+    <button class="audio-btn" data-title="登上塔楼">
+      <span class="dot"></span> 播放讲解
+    </button>
+  </section>
+
+  <!-- ============ 9 ============ -->
+  <section id="museum">
+    <span class="tag">Cripta y Museo · 地下</span>
+    <h2>地下室与博物馆<span class="es">Donde descansa Gaudí</span></h2>
+    <figure class="figure" data-img="Sagrada Familia Museum.jpg" data-icon="⚱️">
+      <figcaption>博物馆 · 模型、图纸与高迪的墓所</figcaption>
+    </figure>
+    <p>参观动线通常会经过地下博物馆。这里陈列高迪的<b>原始设计模型、几何草图与施工影像</b>，能看懂教堂那些奇特曲线背后的力学逻辑——包括他著名的<b>悬链线倒挂模型</b>：用绳子和小沙袋倒挂求出最稳的拱形，再翻转过来就是拱顶。</p>
+    <ul class="facts">
+      <li><b>高迪本人就长眠于地下室（Cripta）</b>，1926 年安葬于此。</li>
+      <li>展区讲述从高迪时代到今天、跨越数代工匠的接力建造史。</li>
+      <li>走到这里通常已近出口，可留 20–30 分钟慢慢看。</li>
+    </ul>
+    <button class="audio-btn" data-title="地下室与博物馆">
+      <span class="dot"></span> 播放讲解
+    </button>
+  </section>
+
+  <!-- ============ 10 ============ -->
+  <section id="route">
+    <span class="tag">Ruta · 动线建议</span>
+    <h2>一条顺畅的参观动线<span class="es">Cómo aprovechar la visita</span></h2>
+    <ul class="facts">
+      <li><b>① 到达即先在外围绕一圈</b>：先看 <b>诞生立面（东）</b>，再走到 <b>受难立面（西）</b> 对比两种风格，顺便去高迪广场水池拍全景。</li>
+      <li><b>② 按票面时间进场安检</b>，一进门就抬头看中殿「石头森林」和顶棚。</li>
+      <li><b>③ 在中殿中央站定看彩窗光影</b>，东暖西冷慢慢感受。</li>
+      <li><b>④ 若有塔票</b>，按预约时段去集合登塔，下塔走螺旋梯。</li>
+      <li><b>⑤ 出口前逛地下博物馆</b>，看模型与高迪墓所收尾。</li>
+      <li><b>⑥ 总时长</b>：不含排队约 <b>1.5–2 小时</b>；含登塔预留 <b>2.5 小时</b>。</li>
+    </ul>
+    <div class="callout"><b>一句话记住圣家堂：</b>外面是「三个故事」（诞生·受难·荣耀），里面是「一片森林」，而它最动人的地方，是<b>它还没盖完</b>——你看到的是一座正在生长的建筑。</div>
+    <button class="audio-btn" data-title="参观动线建议">
+      <span class="dot"></span> 播放讲解
+    </button>
+  </section>
+
+</main>
+
+<footer>
+  <p>圣家堂参观讲解指南 · 图文音频导览</p>
+  <p style="margin-top:.5rem">语音由浏览器合成播放。若听不到声音：请确认设备未静音；Chrome/Edge 用户如无中文语音，可在系统「语音/朗读」设置里安装中文语音包；iPhone Safari 需先点一次按钮授权。</p>
+  <p style="margin-top:.5rem;opacity:.6">建造中的世界遗产 · 内容为参观导览参考，票务与开放时间请以官网 sagradafamilia.org 为准。</p>
+</footer>
+
+<!-- Sticky mini player -->
+<div id="player">
+  <button id="p-toggle" title="暂停/继续">⏸</button>
+  <div class="now" id="p-now">正在播放…</div>
+  <span class="rate" id="p-rate" title="点击切换语速">1.0×</span>
+  <button id="p-stop" title="停止">✕</button>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- 讲解文稿（与各段落对应） ---------- */
+  var SCRIPTS = {
+    "走近圣家堂":"欢迎来到巴塞罗那圣家堂。这是建筑师安东尼·高迪倾注四十多年心血的巨作，从一八八二年动工，至今仍在建造，被称为永远盖不完的教堂。高迪一八八三年接手后，此后四十三年只专注于这一件事，晚年甚至住在工地上。一九二六年他被有轨电车撞倒去世时，教堂只完成了大约四分之一。整座教堂规划有十八座塔楼，最高的耶稣基督塔建成后将达到一百七十二点五米，成为世界最高的教堂。高迪说，直线属于人类，曲线属于上帝。所以你会发现，整座教堂几乎没有一条直线，它模仿森林、山峰、骨骼与花朵，把大自然的结构变成了石头。",
+    "参观须知":"参观前，请务必提前在官网网上订票，圣家堂出售定时票，现场几乎买不到当天票，旺季常常提前好几天就售罄。购票时要注意选择票型：基础票只含教堂，还有含语音导览和含登塔的版本。如果你想登塔，一定要在购票时单独选购，名额有限，还要选具体时段。这是一座活着的宗教场所，请避免过于暴露的衣着。想看最美的内部光影，建议上午十点前或下午三点后进场：上午东侧彩窗透入暖金色的光，下午西侧透入蓝紫色的冷光。交通很方便，坐地铁二号线或五号线到圣家堂站，出站就到。安检类似机场，大件行李无法寄存，尽量轻装前往。",
+    "诞生立面":"我们面前的是诞生立面，它朝向东方，迎着日出，象征基督的诞生与生命，也是高迪在世时唯一亲手督造完成的一面。它繁复得像被藤蔓和生灵覆盖，石头上爬满了花草、动物、天使和乐师。三道门分别献给希望、信仰和慈爱三种美德。正中央是耶稣诞生的场景：马槽、圣母玛利亚和约瑟，上方是报喜的天使唱诗班。留心找找那些藏在石头里的细节：火鸡、变色龙、蜗牛，还有驮着立柱的石龟，象征永恒与稳定。想拍全景，可以退到马路对面高迪广场的水池边，把整面连同水中倒影一起收进画面，这是最经典的机位。",
+    "受难立面":"绕到教堂西侧，就是受难立面。和诞生立面的繁茂华丽完全相反，这一面刻意做得冷峻、瘦削、棱角分明。那些倾斜的立柱像被剥去皮肉的骨头，表现耶稣受难与死亡的痛苦。它由雕塑家苏比拉克斯从上世纪八十年代起，按高迪的构想续建，风格更加现代和抽象。立面上的场景自下而上、呈S形排列，讲述从最后的晚餐，到耶稣被钉上十字架、下葬的整个过程。这里有个有名的细节：一个由十六格数字组成的幻方，无论横着、竖着还是斜着相加，结果都等于三十三，正是耶稣受难时的年龄。",
+    "荣耀立面":"教堂朝南的这一面，是荣耀立面，也是规划中的正门，规模最大、最宏伟。它的主题是荣耀，象征人通往上帝、通往天堂之路。这一面至今仍在建造，你参观时很可能会看到脚手架和吊塔，这正是这座活着的教堂的一部分。将来它会由一段宏大的台阶引入，气势远超现有的两面。也正是在这座立面的上方，将矗立起最高的耶稣基督塔，高达一百七十二点五米，塔顶有一支会发光的十字架。",
+    "中殿石林":"现在，我们走进教堂内部。很多人在踏进来的一瞬间都会屏住呼吸，因为这是整趟参观的高潮。高迪把内部设计成一片森林：立柱像树干一样向上生长，在高处分出枝杈，撑起顶棚，而顶棚的天窗，就像透过树叶洒下的阳光。这些立柱采用高迪独创的树状分叉结构，能更均匀地承重，所以中殿不需要外部的飞扶壁，他说这是大自然早就解决了的问题。柱子还会随着高度改变截面形状，从多边形慢慢变成圆形，像被光打磨过一样。请一定记得抬头，站在中殿正中，慢慢看那片高达四十五米的石头树冠，这是全世界独一无二的天花板。",
+    "彩窗与光影":"高迪把光，当成一种建筑材料来使用。这里的彩色玻璃窗，东侧用金、橙、红这样的暖色，象征日出与诞生；西侧用蓝、绿、紫这样的冷色，象征日落与安息。当阳光穿过玻璃，整个中殿仿佛被点燃，色彩会随着时间，在石柱和地面上缓缓移动。上午的暖光和下午的冷光，是两种完全不同的体验。你会发现彩窗上大多是抽象的色块，而不是人物，这是高迪特意的安排，为的是让光本身成为主角。找一面浅色的石柱或白墙，看看色光是怎样投在上面的，那就是最美的取景框。",
+    "登上塔楼":"如果你在购票时加选了登塔，就可以乘电梯上到塔楼高处，近距离欣赏塔尖上精美的马赛克装饰，并俯瞰整座巴塞罗那城，以及地中海的方向。诞生立面塔和受难立面塔视野各有不同。这里有个小贴士：上塔坐电梯，下塔走楼梯。那段螺旋石梯像一只巨大的贝壳或蜗牛壳，是圣家堂的名场面，但台阶很窄、没有扶手，中心是镂空的。有恐高、幽闭恐惧或行动不便的朋友请慎重选择。塔票按时段限流，请一定按票面时间，到指定入口集合，迟到就不再等候了。",
+    "地下室与博物馆":"参观的最后，动线通常会经过地下博物馆。这里陈列着高迪的原始设计模型、几何草图和施工影像，能帮你看懂教堂那些奇特曲线背后的力学逻辑。其中最有名的，是他的悬链线倒挂模型：用绳子和小沙袋倒挂，求出最稳固的拱形，再翻转过来，就是教堂的拱顶。而高迪本人，就长眠在这座教堂的地下室里，一九二六年安葬于此。展区还讲述了从高迪时代到今天，跨越好几代工匠接力建造的历史。走到这里，通常已经接近出口，可以留出二三十分钟，慢慢参观。",
+    "参观动线建议":"最后，给你一条顺畅的参观动线。第一步，到达后先在外围绕一圈，先看东边的诞生立面，再走到西边的受难立面对比两种风格，顺便去高迪广场的水池拍全景。第二步，按票面时间进场安检，一进门就抬头看中殿的石头森林和顶棚。第三步，在中殿中央站定，感受东暖西冷的彩窗光影。第四步，如果有塔票，按预约时段去登塔，下塔记得走螺旋楼梯。第五步，出口前逛一逛地下博物馆，看模型和高迪墓所收尾。不含排队，整个参观大约需要一个半到两小时，如果登塔，请预留两个半小时。记住圣家堂：外面是诞生、受难、荣耀三个故事，里面是一片森林，而它最动人的地方，是它还没有盖完，你看到的，是一座正在生长的建筑。"
+  };
+
+  /* ---------- 图片：尝试从维基共享资源加载，失败则显示占位 ---------- */
+  document.querySelectorAll(".figure").forEach(function(fig){
+    var file = fig.getAttribute("data-img");
+    var icon = fig.getAttribute("data-icon") || "🖼";
+    var cap = fig.querySelector("figcaption");
+    var capText = cap ? cap.textContent : "";
+    var ph = document.createElement("div");
+    ph.className = "ph";
+    ph.innerHTML = '<div class="icon">'+icon+'</div><div style="font-size:.85rem;opacity:.75;max-width:80%">'+capText+'</div>';
+    fig.insertBefore(ph, cap || null);
+    if(file){
+      var img = new Image();
+      img.alt = capText;
+      img.referrerPolicy = "no-referrer";
+      img.onload = function(){ ph.style.display="none"; };
+      img.onerror = function(){ /* 保留占位图 */ };
+      img.src = "https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent(file) + "?width=1000";
+      fig.insertBefore(img, ph);
+    }
+  });
+
+  /* ---------- 语音合成 ---------- */
+  var synth = window.speechSynthesis;
+  var player = document.getElementById("player");
+  var pNow = document.getElementById("p-now");
+  var pToggle = document.getElementById("p-toggle");
+  var pStop = document.getElementById("p-stop");
+  var pRate = document.getElementById("p-rate");
+  var rates = [0.9, 1.0, 1.15, 1.3];
+  var rateIdx = 1;
+  var currentBtn = null;
+
+  function pickVoice(){
+    var vs = synth.getVoices() || [];
+    // 优先中文语音
+    var zh = vs.filter(function(v){ return /zh|cmn|Chinese/i.test(v.lang) || /zh|Chinese/i.test(v.name); });
+    return zh[0] || null;
+  }
+
+  function resetBtn(){
+    if(currentBtn){ currentBtn.classList.remove("playing"); currentBtn.querySelector("span:last-child")==null; }
+    document.querySelectorAll(".audio-btn").forEach(function(b){
+      b.classList.remove("playing");
+      b.lastChild.nodeType; // no-op
+    });
+  }
+  function setBtnLabel(btn, text){
+    // 按钮结构: <span dot></span> 文本
+    btn.childNodes.forEach ? null : null;
+    // 直接重建
+    btn.innerHTML = '<span class="dot"></span> ' + text;
+  }
+
+  function stopAll(){
+    synth.cancel();
+    document.querySelectorAll(".audio-btn").forEach(function(b){
+      b.classList.remove("playing");
+      b.innerHTML = '<span class="dot"></span> 播放讲解';
+    });
+    player.classList.remove("show");
+    currentBtn = null;
+  }
+
+  function play(btn, title){
+    var text = SCRIPTS[title];
+    if(!text){ return; }
+    synth.cancel();
+    // reset all buttons
+    document.querySelectorAll(".audio-btn").forEach(function(b){
+      b.classList.remove("playing");
+      b.innerHTML = '<span class="dot"></span> 播放讲解';
+    });
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang = "zh-CN";
+    u.rate = rates[rateIdx];
+    var v = pickVoice();
+    if(v){ u.voice = v; }
+    u.onend = function(){ stopAll(); };
+    u.onerror = function(){ stopAll(); };
+    currentBtn = btn;
+    btn.classList.add("playing");
+    btn.innerHTML = '<span class="dot"></span> 播放中…';
+    pNow.textContent = "🎧 " + title;
+    pToggle.textContent = "⏸";
+    player.classList.add("show");
+    synth.speak(u);
+  }
+
+  document.querySelectorAll(".audio-btn").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var title = btn.getAttribute("data-title");
+      if(btn.classList.contains("playing")){ stopAll(); return; }
+      play(btn, title);
+    });
+  });
+
+  pToggle.addEventListener("click", function(){
+    if(synth.paused){ synth.resume(); pToggle.textContent="⏸"; }
+    else if(synth.speaking){ synth.pause(); pToggle.textContent="▶"; }
+  });
+  pStop.addEventListener("click", stopAll);
+  pRate.addEventListener("click", function(){
+    rateIdx = (rateIdx+1) % rates.length;
+    pRate.textContent = rates[rateIdx].toFixed(2).replace(/0$/,'') + "×";
+    // 若正在播放，重新以新语速播放当前段
+    if(currentBtn){ play(currentBtn, currentBtn.getAttribute("data-title")); }
+  });
+
+  // 有些浏览器要等 voices 异步加载
+  if(synth.onvoiceschanged !== undefined){
+    synth.onvoiceschanged = pickVoice;
+  }
+  // 离开页面时停止
+  window.addEventListener("beforeunload", function(){ synth.cancel(); });
+})();
+</script>
+</body>
+</html>
